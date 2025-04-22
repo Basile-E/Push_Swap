@@ -2,10 +2,16 @@
 #define PUSH_SWAP_H
 
 // Inclusion de la bibliothèque libft
-#include "../Fonctions/libft/libft.h"
+#include "/home/basile/Documents/Common_Core/Push_Swap/Libft/libft.h"
 
-struct s_stack {
-    s_stack* next;
-}t-;
 
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}	t_list;
+
+
+void    ra(t_list **stack_a);
+void	print_stack(t_list *stack);
 #endif
