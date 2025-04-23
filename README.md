@@ -79,3 +79,51 @@ rr : ra and rb at the same time.
 rra : reverse rotate a - shift down all elements of stack a by 1. The last element becomes the first one.
 rrb : reverse rotate b - shift down all elements of stack b by 1. The last element becomes the first one.
 rrr : rra and rrb at the same time.
+
+
+
+
+
+
+a comprendre :
+
+je ne suis pas sur de comprendre comment "initialiser" une liste chainer, quel sont les variables utiliser et comment leurs atribuer des valeurs ? mes args commence en tant que char puis passent en int
+
+est-ce que je suis obliger d'utiliser les type cast ou je suis juste con
+
+je pense etre correct, du coup je track seulement les head des liste et les pointeur next font le liens entre tout les élements de la liste du coup j'aurais head_a et head_b et dans mon main je fait les verrifications, puis j'appel des fonctions qui transforme les arg en int pour les liste puis je crée la liste a et et ensuite en fonction de la taille de la liste a je fait un mini_sort ou j'appel push_swap qui fera les apppels au fonction d'algorithmes 
+
+game plan :
+
+[ ] comprehension des listes et implementation 
+
+[ ] transformation des arg en int utilisable 
+
+[ ] initialisation de la liste a avec les arg 
+
+[ ] création d'un mini_sort en cas de 3 arg (potentiellement pour 5?)
+
+[ ] verrification de si lst_a < 3 fait un appel a mini_sort et fin du programme 
+
+[ ] mise en place de la fonction push_swap et préparation pour l'appel des algo 
+
+[ ] implémentation des algo
+
+[ ] aller boire une bierre 
+
+
+to-do :
+
+dans la comprehension des liste, est-ce que je peux remplacer la valeur de retour des fonctions lst par un      void * en soit ça devrait pouvoir contenir un pointeur vers head et renvoyer une head ? 
+
+si j'ai besoin d'une ligne dans le main je peux rempalcer le i qui parcour les arg et rempalcer par ac et decrementer 
+
+Fonctions :
+
+je vais avoir besoins d'une ribanbelle de fonctions de liste, un lst_find_element, une fonction make_lst qui prend un head en pointeur et renvoi la head avec la liste 
+
+
+me faire un github de la libft avec une makefile contenant une commande qui push tout sur git proprement et qui ajoute le libft.h dans le include file et le libft.a dans le lib file, voir ou vont les fichier des fonctions ? et voir si je peux "mettre a jour" la bibliotheque standard <libft.h> juste en changeant les fichiers et en faisant cp libft.h /etc/etc/include/ 
+
+si j'y arrive j'ai une libft hyper facile a utiliser et je peux y ajouter des fonctions tres facilement
+
