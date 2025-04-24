@@ -7,24 +7,6 @@ typedef struct s_stack {
     struct s_stack* next; 
 }   t_stack;
 
-void	ft_lstclear(t_stack **lst, void (*del)(void*))
-{
-	t_stack	*ptr_i;
-	t_stack	*next;
-
-	if (!*lst)
-		return ;
-	ptr_i = *lst;
-	while (ptr_i)
-	{
-		next = ptr_i->next;
-		(*del)(ptr_i->value);
-		free(ptr_i);
-		ptr_i = next;
-	}
-	*lst = NULL;
-}
-
 void	lst_print(t_stack *head)
 {
     t_stack * temp;
@@ -72,103 +54,113 @@ void	lstadd_back(t_stack **lst, t_stack *new)
 		lstlast(*lst)->next = new;
 }
 
-int	main(int ac, char **av)
+
+
+
+
+
+
+
+int main(int ac, char **av)
 {
-    t_stack *head;
+    t_stack *head = NULL;
     t_stack *temp;
     char    **tableau;
     int     *tab_int;
-    int     i;
+    int     i = 0;
+    int count = 0;
 
-    i = 0;
-    tab_int[i] = 0;
-    if(ac = 2)
+
+    if(ac == 2)
     {
-        ft_printf("av[2] = %s\n", av[1]);
+        ft_printf("av[1] = %s\n", av[1]);
         tableau = ft_split(av[1], ' ');
-        ft_printf("tableau apres split = %s\n", tableau[i]);
+        if (!tableau)
+            return (ft_printf("Erreur : ft_split a échoué\n"));
+            
+        // Compter le nombre d'éléments
+        while (tableau[count])
+            count++;
+            
+        // Allouer de la mémoire pour tab_int MAINTENANT
+        tab_int = malloc(sizeof(int) * count);
+        if (!tab_int)
+        {
+            // Nettoyer tableau avant de quitter
+            i = 0;
+            while (tableau[i])
+                free(tableau[i++]);
+            free(tableau);
+            return (ft_printf("Erreur : allocation mémoire échouée\n"));
+        }
+        
+        ft_printf("tableau apres split = %s\n", tableau[0]);
+        
+        // passe d'un tableau de char a une liste d'int
+        i = 0;
         while(tableau[i])
         {
             tab_int[i] = ft_atoi(tableau[i]);
-            ft_printf("char to int tab : %i\n", tab_int[i]);
+            ft_printf("char to int tab[%d] : %i\n", i, tab_int[i]);
+            i++;
+        }
+
+        // Libérer la mémoire de tableau qui devient useless 
+        // potentiellement juste faire une fonction clean
+        i = 0;
+        while (tableau[i])
+            free(tableau[i++]);
+        free(tableau);
+        i = 0;
+        while(i < count)
+        {
+            temp = lstnew(tab_int[i]);
+            if(!temp)
+                return(ft_printf("Error during linked list init\n"));
+            lstadd_back(&head, temp);
+            i++;
+        }
+    }
+    else if (ac > 2)
+    {
+        i = 1;
+        while (av[i])
+        {
+            temp = lstnew(ft_atoi(av[i]));
+            lstadd_back(&head, temp);
             i++;
         }
     }
     else if (ac < 2)
         return (ft_printf("no arg error\n"));
 
-    // extrait les arg pour en faire un tableau accessible via tab_int[i]
+    lst_print(head);
 
-    // boucle while pour parcourir le tableau tab_int[i] et ajouter les element a la_stacke
-    while(i >= 0)
-    {
-        temp = lstnew(tab_int[i]);
-        lstadd_front(&head, temp);
-
-    }
-
-
-    int value = 10;
+    // jusque ici je prend en charge 2 ou plus ac et je crée ma liste chainé proprement
+    // il faut maintenant un mini sort si la liste fait moins 4 éléments 
+    // et potentiellement commencer a tout envoyer dans leurs fichiers réspéctifs
+    // faire un fichier fonctions lst pour pouvoir supprimer celle de la libft
+    // et clean un peut le main des fonction de gestion des arg
     
     
-    
-    temp = lstnew(value);
-    //lstadd_front(&head, temp);
-    lstadd_back(&head, temp);
-    //lst_print(head);
+    free(tab_int);
+    return 0;
 }
 
 
+/*
+    Pseudo code :
+
+    main(ac, av)
+
+    verrifier le nombre d'arguments 
+    return error si inferieur a 2 et si = a 2 fait ft_split
+    si supperieur a 2, crée tab_int depuis les arg 
+
+    avec tab_int prêt on peut faire une fonction qui init_lst qui crée la liste
+    grace au elements de tab_int
+
+    en fonction de la taille de la liste faire un mini_sort
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// int	main(int ac, char **av)
-// {
-//     t_stack	*stack_a;
-//     int		val1 = 1, val2 = 2, val3 = 3;
-//     // char    **tableau;
-//     // int     *tab_int;
-//     // int     i = 0;
-//     // // Verrification et création du tableau
-//     // if(ac < 2)
-//     // {
-//     //     tableau = ft_split(av[2], ' ');
-//     //     while(tableau[i] == NULL)
-//     //     {
-//     //         tab_int[i] = ft_atoi(tableau[i]);
-//     //         printf("char to int tab : %i", tab_int[i]);
-//     //         i++;
-//     //     }
-//     // }
-//     // Création de la pile
-//     stack_a = ft_lstnew(&val1);
-//     ft_lstadd_back(&stack_a, ft_lstnew(&val2));
-//     ft_lstadd_back(&stack_a, ft_lstnew(&val3));
-
-//     // Affichage avant rotation
-//     printf("Avant ra:\n");
-//     print_stack(stack_a);
-
-//     // Effectuer la rotation
-//     ra(&stack_a);
-
-//     // Affichage après rotation
-//     printf("Après ra:\n");
-//     print_stack(stack_a);
-
-//     // Libération de la mémoire
-//     ft_lstclear(&stack_a, NULL);
-//     return (0);
-// }
+*/
