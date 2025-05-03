@@ -123,6 +123,15 @@ int swap(t_stack **head_to_swap)
     return (0);
 }
 
+int do_pa(t_stack *head_a, t_stack *head_b)
+{
+    if (!head_a || !head_b)
+        return (0);
+    pushTo(&head_b, &head_a);
+    ft_printf("pa\n");
+    return (1);
+}
+
 int     main(int ac, char **av)
 {
     t_stack *head_a = NULL;
@@ -222,6 +231,10 @@ int     main(int ac, char **av)
     lst_print(head_a);
     lst_print(head_b);
 
+    do_pa(head_a, head_b);
+
+    lst_print(head_a);
+
     // jusque ici je prend en charge 2 ou plus ac et je crée ma liste chainé proprement
     // il faut maintenant un mini sort si la liste fait moins 4 éléments 
     // et potentiellement commencer a tout envoyer dans leurs fichiers réspéctifs
@@ -234,6 +247,15 @@ int     main(int ac, char **av)
 
 
 /*
-    Pseudo code :
+    Pseudo code d'algo:
 
+    il faut :
+    un tiny_sort
+    un is_sorted = dans le push initial de a vers b a chaque pb on va verrifier si a est sorted idem dans b etc 
+    un count_push_cost = le push cost peut etre defini part le nobre de rotate nécéssaire pour monter le noeud en haut de la liste + le nombre d'operation nescessaire pour que le head de a soi au bon emplacement
+    un lst_find_under  = une fonction pour trouver le noeud superieur le plus proche
+    un find_midle =     
+
+    chaque noeud doit avoir des value de push_cost, de ...
+    la liste b doit etre a l'inverse de la liste a final dans l'ordre croissant ou decroissant car le pa final va inverser l'ordre 1234 = 4321
 */
