@@ -123,13 +123,75 @@ int swap(t_stack **head_to_swap)
     return (0);
 }
 
-int do_pa(t_stack *head_a, t_stack *head_b)
+int do_pa(t_stack **head_a, t_stack **head_b)
 {
-    if (!head_a || !head_b)
-        return (0);
-    pushTo(&head_b, &head_a);
+    pushTo(head_b, head_a);
     ft_printf("pa\n");
     return (1);
+}
+
+int do_pb(t_stack **head_a, t_stack **head_b)
+{
+    pushTo(head_a, head_b);
+    ft_printf("pb\n");
+    return (1);
+}
+
+int do_sa(t_stack **head_a)
+{
+    swap(head_a);
+    ft_printf("sa\n");
+}
+
+int do_sb(t_stack **head_b)
+{
+    swap(head_b);
+    ft_printf("sb\n");
+}
+
+int do_ss(t_stack **head_a, t_stack **head_b)
+{
+    swap(head_a);
+    swap(head_b);
+    ft_printf("ss\n");
+}
+
+int do_ra(t_stack **head_a)
+{
+    rotate(head_a);
+    ft_printf("ra\n");
+}
+
+int do_rb(t_stack **head_b)
+{
+    rotate(head_b);
+    ft_printf("rb\n");
+}
+
+int do_rr(t_stack **head_a, t_stack **head_b)
+{
+    rotate(head_a);
+    rotate(head_b);
+    ft_printf("rr\n");
+}
+
+int do_rra(t_stack **head_a)
+{
+    revers_rotate(head_a);
+    ft_printf("rra\n");
+}
+
+int do_rrb(t_stack **head_b)
+{
+    revers_rotate(head_b);
+    ft_printf("rrb\n");
+}
+
+int do_rrr(t_stack **head_a, t_stack **head_b)
+{
+    revers_rotate(head_a);
+    revers_rotate(head_b);
+    ft_printf("rrr\n");
 }
 
 int     main(int ac, char **av)
@@ -206,45 +268,68 @@ int     main(int ac, char **av)
     else if (ac < 2)
         return (ft_printf("no arg error\n"));
 
+    ft_printf("\n\n ------liste de base ------ \n\n");
+    lst_print(head_a);
+    lst_print(head_b);
+    
+
+    ft_printf("\n\n ------Test PushTo------ \n\n");
+    lst_print(head_a);
+    lst_print(head_b);
+   
+    do_pb(&head_a, &head_b);
+
     lst_print(head_a);
     lst_print(head_b);
 
-    pushTo(&head_a, &head_b);
-    pushTo(&head_a, &head_b);
-    pushTo(&head_a, &head_b);
+    do_pb(&head_a, &head_b);
 
     lst_print(head_a);
     lst_print(head_b);
 
-    swap(&head_a);
-
-    lst_print(head_a);
-    lst_print(head_b);
-
-    rotate(&head_a);
+    do_pb(&head_a, &head_b);
 
     lst_print(head_a);
     lst_print(head_b);
     
-    revers_rotate(&head_a);
+
+    ft_printf("\n\n ------Test Swap------ \n\n");
+    do_sa(&head_a);
+    
+    lst_print(head_a);
+    lst_print(head_b);
+    
+    
+    ft_printf("\n\n ------Test Rotate------ \n\n");
+    do_ra(&head_a);
 
     lst_print(head_a);
     lst_print(head_b);
 
-    do_pa(head_a, head_b);
+    ft_printf("\n\n ------Test Reverse Rotate------ \n\n");
+    do_rra(&head_a);
 
     lst_print(head_a);
+    lst_print(head_b);
 
-    // jusque ici je prend en charge 2 ou plus ac et je crée ma liste chainé proprement
-    // il faut maintenant un mini sort si la liste fait moins 4 éléments 
-    // et potentiellement commencer a tout envoyer dans leurs fichiers réspéctifs
-    // faire un fichier fonctions lst pour pouvoir supprimer celle de la libft
-    // et clean un peut le main des fonction de gestion des arg
+    ft_printf("\n\n ------Test do_pa------ \n\n");
+    lst_print(head_a);
+    lst_print(head_b);
+    do_pa(&head_a, &head_b);
+    lst_print(head_a);
+    lst_print(head_b);
+    do_pb(&head_a, &head_b);
+    lst_print(head_a);
+    lst_print(head_b);
 
+   
     free(tab_int);
     return 0;
 }
 
+
+ // il faut maintenant un mini sort si la liste fait moins 4 éléments 
+    // et potentiellement commencer a tout envoyer dans leurs fichiers réspéctifs
 
 /*
     Pseudo code d'algo:
