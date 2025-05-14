@@ -194,7 +194,61 @@ int do_rrr(t_stack **head_a, t_stack **head_b)
     ft_printf("rrr\n");
 }
 
-int     main(int ac, char **av)
+
+int is_List_In_Order(t_stack *HeadofList)
+{
+    t_stack *temp;
+
+    temp = HeadofList->next;
+    while (temp->next != NULL)
+    {
+        if (HeadofList->value < temp->value)
+        {
+            HeadofList  = HeadofList->next;
+            temp        = temp->next;
+        }
+        else
+            return (1); 
+    }
+    return (0);
+}
+
+t_stack *Find_Highest(t_stack *head_to_find)
+{
+    t_stack *temp;
+    
+    temp = head_to_find;
+    while(head_to_find->next != NULL)
+    {
+        head_to_find = head_to_find->next;
+        if (temp->value < head_to_find->value)
+            temp = head_to_find;
+    }
+    return (temp);
+}
+int mini_sort(t_stack **head_to_sort)
+{
+    // il faut trouver le plus grand dans les trois, est-ce qu'il est au debut de la liste ? mais si il est au second emplacement ?
+    // assume qu'il etais en haut, on l'envoi en bas avec rotate, maintenant on sait que le plus grand est en bas
+    // on compare les deux neud restant pour savoir le quel est le plus grand
+    //
+    // Fonctions : 
+    // Find biggest
+    // Compare_Node(head; head->next)
+
+    t_stack *hightest_node;
+
+    hightest_node = Find_Highest(*head_to_sort);
+    if (*head_to_sort == hightest_node)
+        do_ra(head_to_sort);
+    else if ((*head_to_sort)->next == hightest_node)
+        do_rra(head_to_sort);
+    if ( (*head_to_sort)->value > (*head_to_sort)->next->value)
+        do_sa(head_to_sort);
+    ft_printf("\n\nYou Got Mini_Sorted\n\n");
+}
+
+int main(int ac, char **av)
 {
     t_stack *head_a = NULL;
     t_stack *head_b = NULL;
@@ -271,8 +325,34 @@ int     main(int ac, char **av)
     ft_printf("\n\n ------liste de base ------ \n\n");
     lst_print(head_a);
     lst_print(head_b);
-    
 
+
+    ft_printf("\n\n ------Test List in Order------ \n\n");
+    
+    lst_print(head_a);
+    
+    int temp_int = is_List_In_Order(head_a);
+    if(temp_int == 0)
+        ft_printf("la liste est dans l'ordre\n");
+    else if (temp_int == 1)
+        ft_printf("la liste n'est pas dans l'ordre");
+
+
+
+    mini_sort(&head_a);
+
+    lst_print(head_a);
+    
+    int temp_int2 = is_List_In_Order(head_a);
+    if(temp_int2 == 0)
+        ft_printf("la liste est dans l'ordre\n");
+    else if (temp_int2 == 1)
+        ft_printf("la liste n'est pas dans l'ordre");
+    
+    
+    
+    
+    
     ft_printf("\n\n ------Test PushTo------ \n\n");
     lst_print(head_a);
     lst_print(head_b);
@@ -323,13 +403,15 @@ int     main(int ac, char **av)
     lst_print(head_b);
 
    
+
+
     free(tab_int);
     return 0;
 }
 
 
  // il faut maintenant un mini sort si la liste fait moins 4 éléments 
-    // et potentiellement commencer a tout envoyer dans leurs fichiers réspéctifs
+ // et potentiellement commencer a tout envoyer dans leurs fichiers réspéctifs
 
 /*
     Pseudo code d'algo:
