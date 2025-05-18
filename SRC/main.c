@@ -56,6 +56,18 @@ void	lstadd_back(t_stack **lst, t_stack *new)
 		lstlast(*lst)->next = new;
 }
 
+int lst_size(t_stack *head)
+{
+    int i;
+    i = 0;
+    while(head)
+    {
+        i++;
+        head = head->next;
+    }
+    return (i);
+}
+
 int pushTo(t_stack **head_from, t_stack **head_to)
 {
     t_stack *temp;
@@ -246,6 +258,22 @@ int mini_sort(t_stack **head_to_sort)
     if ( (*head_to_sort)->value > (*head_to_sort)->next->value)
         do_sa(head_to_sort);
     ft_printf("\n\nYou Got Mini_Sorted\n\n");
+}
+t_stack *Find_Smallest(head_to_find)
+{
+
+}
+
+void    push_swap(t_stack **head_a, t_stack **head_b)
+{
+    // prend la liste a et push tout les ellements dans b jusqua ce qu'il ne reste que 3 ellements dans a
+    // fait un mini sort sur a 
+    // debut d'une boucle tant que is sorted a == 0 (oui) et que b est vide 
+    // pour chaque noeud il faut, 
+    // son index dans la liste
+    // son target _node
+    // son push_cost
+    // son index par rapport a la mediane 
 }
 
 int main(int ac, char **av)
