@@ -4,7 +4,16 @@
 
 typedef struct s_stack {
     int             value;
-    struct s_stack* next; 
+    struct s_stack* next;
+    struct s_stack* target_node;
+    int             index;
+    int             targ_index;
+    int             lst_size;
+    int             median;
+    int             med_index;
+    int             targ_med_index;
+    int             is_o_med;
+    int             push_cost;
 }   t_stack;
 
 int	lst_print(t_stack *head)
@@ -259,7 +268,161 @@ int mini_sort(t_stack **head_to_sort)
         do_sa(head_to_sort);
     ft_printf("\n\nYou Got Mini_Sorted\n\n");
 }
-t_stack *Find_Smallest(head_to_find)
+
+t_stack     *find_smallest(t_stack *head_to_find)
+{
+    t_stack *head_temp;
+    t_stack *smallest;
+    int small;
+
+    small = __INT_MAX__;
+    head_temp = head_to_find;
+    while(head_temp->next != NULL)
+    {
+        if (head_temp->value < small)
+        {
+            small = head_temp->value;
+            smallest = head_temp;
+        } 
+        head_temp = head_temp->next;
+    }
+    if (small >= __INT_MAX__)
+        smallest = NULL;
+    return (smallest);
+}
+
+void    set_target_node(t_stack *head_a, t_stack *head_b)
+{
+    t_stack    *current_a;
+    t_stack    *current_b;
+    t_stack    *target_node;
+    long        target_index;
+
+    current_b = head_b;
+    while(current_b->next != NULL)
+    {
+        target_index = __LONG_MAX__;
+        current_a = head_a;
+        while(current_a->next != NULL)
+        {
+            if ((current_a->value > current_b->value) && (current_a->value < target_index))
+            {
+                target_index = current_a->value;
+                target_node = current_a;
+            }
+            current_a = current_a->next;
+        }
+        if (target_index == __LONG_MAX__)
+            head_b->target_node = find_smallest(head_a);
+        else
+            head_b->target_node = target_node;
+        current_b = current_b->next;
+    }
+}
+
+void    set_index(t_stack *head)
+{
+    t_stack *temp;
+    int     index;
+
+    index = 0;
+    temp = head;
+    while (temp)
+    {
+        temp->index = index;
+        index++;
+        temp = temp->next;
+    }
+}
+void    set_target_index(t_stack *head)
+{
+    t_stack *temp;
+    
+    temp = head;
+    while(temp)
+    {
+        temp->targ_index = temp->target_node->index;
+        temp = temp->next;
+    }
+}
+
+void    set_median(t_stack *head)
+{
+    t_stack *temp;
+    int     mediane;
+
+    temp = head;
+    temp->lst_size = lst_size(temp);
+    mediane = temp->lst_size / 2;
+    while(temp)
+    {
+        temp->median = mediane;
+        temp = temp->next;
+    }
+}
+
+set_index_median(t_stack *head)
+{
+    t_stack *temp;
+    
+    temp = head;
+    while(temp)
+    {
+        if (temp->index > temp->median)
+        {
+            temp->med_index = temp->lst_size - temp->index;
+            temp->is_o_med = 1;
+        }
+        else
+        {
+            temp->med_index = temp->index;
+            temp->is_o_med = 0;
+        }
+        temp = temp->next;
+    }
+}
+
+void    set_targ_med(t_stack *head)
+{
+    t_stack *temp;
+
+    temp = head;
+    while(temp)
+    {
+        temp->targ_med_index = temp->target_node->med_index;
+        temp = temp->next;
+    }
+}
+
+void    set_push_cost(t_stack *head_a, t_stack *head_b)
+{
+    t_stack *temp_a;
+    t_stack *temp_b;
+
+    temp_a = head_a;
+    temp_b = head_b;
+    while(temp_b)
+    {
+
+        if ((temp_a->is_o_med && temp_b->is_o_med) || (temp_a->is_o_med == 0 && temp_b->is_o_med == 0))
+        {
+            if (temp_a->med_index > temp_b->med_index)
+                temp_b->push_cost = temp_a->med_index;
+            else
+                temp_b->push_cost = temp_b->med_index;
+        }
+        else
+            temp_b->push_cost = temp_b->index + temp_b->targ_index;
+        temp_b = temp_b->next;
+    }
+}
+
+t_stack *find_cheapest(t_stack *head_b)
+{
+    
+}
+
+void    move_node(t_stack *cheapest)
 {
 
 }
@@ -273,7 +436,11 @@ void    push_swap(t_stack **head_a, t_stack **head_b)
     // son index dans la liste
     // son target _node
     // son push_cost
-    // son index par rapport a la mediane 
+    // son index par rapport a la mediane
+    
+    
+
+
 }
 
 int main(int ac, char **av)
