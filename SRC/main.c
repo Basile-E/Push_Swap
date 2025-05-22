@@ -313,9 +313,9 @@ void    set_target_node(t_stack *head_a, t_stack *head_b)
             current_a = current_a->next;
         }
         if (target_index == __LONG_MAX__)
-            head_b->target_node = find_smallest(head_a);
+            current_b->target_node = find_smallest(head_a);
         else
-            head_b->target_node = target_node;
+            current_b->target_node = target_node;
         current_b = current_b->next;
     }
 }
@@ -361,7 +361,7 @@ void    set_median(t_stack *head)
     }
 }
 
-set_index_median(t_stack *head)
+void    set_index_median(t_stack *head)
 {
     t_stack *temp;
     
@@ -419,12 +419,118 @@ void    set_push_cost(t_stack *head_a, t_stack *head_b)
 
 t_stack *find_cheapest(t_stack *head_b)
 {
-    
+    t_stack *temp;
+    t_stack *cheapest;
+
+    temp = head_b;
+    cheapest = head_b;
+    while(temp)
+    {
+        if (temp->push_cost < cheapest->push_cost)
+            cheapest = temp;
+        temp = temp->next;
+    }
+    return (cheapest);
 }
 
-void    move_node(t_stack *cheapest)
+void    move_node(t_stack *cheapest, t_stack **head_b, t_stack **head_a)
 {
+    int moves;
+    int temp;
+    int diff;
 
+    if (cheapest->targ_med_index > cheapest->med_index)
+    {
+        temp = cheapest->targ_med_index;
+        diff = temp - cheapest->med_index;
+    }
+    else
+    {
+        temp = cheapest->med_index;
+        diff = temp - cheapest->targ_med_index;
+    }
+    moves = temp - diff;
+
+    // peut etre une fonction set move a part entiere //
+    if (cheapest->is_o_med == 1 && cheapest->target_node->is_o_med == 1)
+    {
+        while (moves)
+        {
+            while (diff)
+            {
+                if (cheapest->targ_med_index < cheapest->med_index)
+                {
+                    if (cheapest->is_o_med == 1)
+                        do_rrb(head_b);
+                    else
+                        do_rb(head_a);
+                    diff--;
+                }
+                else
+                {
+                    if (cheapest->target_node->is_o_med == 1 )
+                        do_rra(head_a);
+                    else
+                        do_ra(head_a);
+                    diff--;
+                    // j'ai changer la logique en inversant le > du premier if, voir si j'ai pas fait de betise
+                }
+            }
+            if (cheapest->is_o_med == 1)
+                do_rrr(head_a,head_b);
+            else
+                do_rr(head_a,head_b);
+            moves--;
+        }
+    }
+    else 
+    {
+        if ((cheapest->target_node->is_o_med == 1) && (cheapest->is_o_med == 0))
+        {
+            while(cheapest->targ_index != 0)
+            {
+                do_rra(head_a);
+                cheapest->targ_index--;
+            }
+            while(cheapest->index != 0)
+            {
+                do_rb(head_b);
+                cheapest->index--;
+            }
+        }
+        else
+        {
+            while(cheapest->targ_index != 0)
+            {
+                do_rra(head_a);
+                cheapest->targ_index--;
+            }
+            while(cheapest->index != 0)
+            {
+                do_rb(head_b);
+                cheapest->index--;
+            }
+        }
+    }
+}
+
+void    set_node(t_stack *head_a, t_stack *head_b)
+{
+    set_target_node(head_a, head_b);
+    ft_printf("test :\n set_target_node node value = %i\n",head_b->target_node->value);
+    set_index(head_a);
+    set_index(head_b);
+    ft_printf("test :\n set index, idex a & b = a:%i\n",head_a->index, head_b->index);
+    set_target_index(head_b);
+    ft_printf("test :\n set target index, targ index = %i\n",head_b->targ_index);
+    set_median(head_a);
+    set_median(head_b);
+    ft_printf("test :\n set median = %i\n",head_b->median);
+    set_index_median(head_b);
+    set_index_median(head_a);
+    ft_printf("test :\n set index median = %i\n", head_b->med_index);
+    set_targ_med(head_b);
+    ft_printf("test :\n set targ median = %i\n",head_b->targ_med_index);
 }
 
 void    push_swap(t_stack **head_a, t_stack **head_b)
@@ -597,7 +703,7 @@ int main(int ac, char **av)
     lst_print(head_a);
     lst_print(head_b);
 
-   
+    set_node(head_a, head_b);
 
 
     free(tab_int);
