@@ -15,7 +15,7 @@ MAGENTA         = \033[0;35m
 
 CC 				= cc
 REMOVE 			= rm -f
-STANDARD_FLAGS 	= -Wall -Wextra -Werror
+STANDARD_FLAGS 	= 
 MINILIBX_FLAGS	= -Lmlx_linux -lmlx -lXext -lX11
 GDB_FLAGS		= -g3
 VALGRIND		= @valgrind --leak-check=full --show-leak-kinds=all \
@@ -28,7 +28,8 @@ UTILS_DIR		= ./Fonctions/
 LIBFT_DIR       = ./Libft/
 
 SRCS 			= $(addprefix $(SRCS_DIR),\
-                main.c)
+                main.c \
+                optimizer.c)
 UTILS			= $(addprefix $(UTILS_DIR), \
                 ra_rb.c)
 LIBFT           = $(LIBFT_DIR)libft.a
@@ -68,7 +69,7 @@ gdb:
 				gdb ./${NAME}
 
 test:  
-				${CC} ${TEST} ${UTILS} ${LIBFT} ${STANDARD_FLAGS} ${MINILIBX_FLAGS} -o Test
+				cc SRC/main.c -LLibft -lft -o test 
 
 gdb_test:		
 				${CC} ${TEST} ${UTILS} ${LIBFT} ${STANDARD_FLAGS} ${GDB_FLAGS} ${MINILIBX_FLAGS} -o Test

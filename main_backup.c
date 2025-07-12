@@ -3,8 +3,7 @@
 #include "../Includes/push_swap.h"
 
 
-// Fonctions de gestion de liste chaînée
-int lst_print(t_stack *head)
+int	lst_print(t_stack *head)
 {
     t_stack * temp;
     temp = head;
@@ -80,7 +79,6 @@ int lst_size(t_stack *head)
     return (i);
 }
 
-// Fonctions de manipulation des piles
 int pushTo(t_stack **head_from, t_stack **head_to)
 {
     t_stack *temp;
@@ -148,7 +146,6 @@ int swap(t_stack **head_to_swap)
     return (0);
 }
 
-// Fonctions d'opérations Push Swap
 void do_pa(t_stack **head_a, t_stack **head_b)
 {
     pushTo(head_b, head_a);
@@ -219,7 +216,6 @@ void do_rrr(t_stack **head_a, t_stack **head_b)
 }
 
 
-// Fonctions utilitaires nécessaires pour optimizer.c
 int is_List_In_Order(t_stack *HeadofList)
 {
     t_stack *temp;
@@ -293,7 +289,7 @@ int mini_sort(t_stack **head_to_sort)
     return (0);
 }
 
-t_stack *find_smallest(t_stack *head_to_find)
+t_stack     *find_smallest(t_stack *head_to_find)
 {
     t_stack *head_temp;
     t_stack *smallest;
@@ -318,44 +314,7 @@ t_stack *find_smallest(t_stack *head_to_find)
     return (smallest);
 }
 
-// Fonction push_swap classique (utilisée par optimizer.c pour les petites listes)
-void push_swap(t_stack **head_a, t_stack **head_b)
-{
-    // Push everything except 3 elements to stack B
-    while(lst_size(*head_a) > 3)
-        do_pb(head_a, head_b);
-    
-    // Sort the 3 remaining elements in stack A
-    mini_sort(head_a);
-    
-    // Initialize node data once before starting the main loop
-    set_node(*head_a, *head_b);
-
-    // Process stack B until empty
-    while(*head_b)
-    {
-        t_stack *cheapest = find_cheapest(*head_b);
-        move_node(cheapest, head_b, head_a);
-    }
-    
-    // Final rotation to get everything in order
-    t_stack *smallest = find_smallest(*head_a);
-    int count = 0;
-    int max_iterations = lst_size(*head_a);
-    
-    while (*head_a != smallest && count < max_iterations)
-    {
-        // Choose the most efficient rotation direction
-        if (smallest->is_o_med == 1)
-            do_rra(head_a);
-        else
-            do_ra(head_a);
-        count++;
-    }
-}
-
-// Fonctions nécessaires pour push_swap
-void set_target_node(t_stack *head_a, t_stack *head_b)
+void    set_target_node(t_stack *head_a, t_stack *head_b)
 {
     t_stack    *current_a;
     t_stack    *current_b;
@@ -384,7 +343,7 @@ void set_target_node(t_stack *head_a, t_stack *head_b)
     }
 }
 
-void set_index(t_stack *head)
+void    set_index(t_stack *head)
 {
     t_stack *temp;
     int     index;
@@ -398,7 +357,7 @@ void set_index(t_stack *head)
         temp = temp->next;
     }
 }
-void set_target_index(t_stack *head)
+void    set_target_index(t_stack *head)
 {
     t_stack *temp;
     
@@ -410,7 +369,7 @@ void set_target_index(t_stack *head)
     }
 }
 
-void set_median(t_stack *head)
+void    set_median(t_stack *head)
 {
     t_stack *temp;
     int     mediane;
@@ -425,7 +384,7 @@ void set_median(t_stack *head)
     }
 }
 
-void set_index_median(t_stack *head)
+void    set_index_median(t_stack *head)
 {
     t_stack *temp;
     
@@ -447,7 +406,7 @@ void set_index_median(t_stack *head)
     }
 }
 
-void set_targ_med(t_stack *head)
+void    set_targ_med(t_stack *head)
 {
     t_stack *temp;
 
@@ -459,7 +418,7 @@ void set_targ_med(t_stack *head)
     }
 }
 
-void set_push_cost(t_stack *head_a, t_stack *head_b)
+void    set_push_cost(t_stack *head_a, t_stack *head_b)
 {
     t_stack *temp_a;
     t_stack *temp_b;
@@ -498,7 +457,7 @@ t_stack *find_cheapest(t_stack *head_b)
     return (cheapest);
 }
 
-void set_node(t_stack *head_a, t_stack *head_b)
+void    set_node(t_stack *head_a, t_stack *head_b)
 {
     set_target_node(head_a, head_b);
     //ft_printf("test :\n set_target_node node value = %i\n",head_b->target_node->value);
@@ -517,7 +476,7 @@ void set_node(t_stack *head_a, t_stack *head_b)
     //ft_printf("test :\n set targ median = %i\n",head_b->targ_med_index);
 }
 
-void move_node(t_stack *cheapest, t_stack **head_b, t_stack **head_a)
+void    move_node(t_stack *cheapest, t_stack **head_b, t_stack **head_a)
 {
     int common_moves; // Nombre de mouvements simultanés (rr/rrr)
     int diff_a = 0;   // Nombre de mouvements individuels pour A
@@ -605,7 +564,94 @@ void move_node(t_stack *cheapest, t_stack **head_b, t_stack **head_a)
 }
 
 
-// Fonctions de vérification et utilitaires
+void print_all_data(t_stack *head)
+{
+
+    if (!head)
+        return;
+    
+    ft_printf("Value: %i\n", head->value);
+
+    // Vérifier si target_node existe avant d'y accéder
+    if (head->target_node)
+        ft_printf("Target node value: %i\n", head->target_node->value);
+    else
+        ft_printf("Target node: NULL\n");
+    
+    // De même pour next
+    if (head->next)
+        ft_printf("Next value: %i\n", head->next->value);
+    else
+        ft_printf("Next: NULL\n");
+
+    ft_printf("test :\n Value of : head->value = %i\n", head->value);
+    ft_printf("test :\n Value of : head->index = %i\n", head->index);
+    ft_printf("test :\n Value of : head->is_o_med = %i\n", head->is_o_med);
+    ft_printf("test :\n Value of : head->lst_size = %i\n", head->lst_size);
+    ft_printf("test :\n Value of : head->med_index = %i\n", head->med_index);
+    ft_printf("test :\n Value of : head->median = %i\n", head->median);
+    //ft_printf("test :\n Value of : head->next->value = %i\n", head->next->value);
+    ft_printf("test :\n Value of : head->push_cost = %i\n", head->push_cost);
+    ft_printf("test :\n Value of : head->targ_index = %i\n", head->targ_index);
+    //ft_printf("test :\n Value of : head->target_node->value = %i\n", head->target_node->value);
+    ft_printf("\n\n ------End Of One Node------ \n\n");
+
+}
+
+void    print_debug(t_stack *head)
+{
+    while (head)
+    {
+        print_all_data(head);
+        head = head->next;
+    }
+}
+
+void    push_swap(t_stack **head_a, t_stack **head_b)
+{
+    // prend la liste a et push tout les ellements dans b jusqua ce qu'il ne reste que 3 ellements dans a
+    // fait un mini sort sur a 
+    // debut d'une boucle tant que is sorted a == 0 (oui) et que b est vide 
+    // pour chaque noeud il faut, 
+    // son index dans la liste
+    // son target _node
+    // son push_cost
+    // son index par rapport a la mediane
+    
+    // Push everything except 3 elements to stack B
+    while(lst_size(*head_a) > 3)
+        do_pb(head_a, head_b);
+    
+    // Sort the 3 remaining elements in stack A
+    mini_sort(head_a);
+    
+    // Initialize node data once before starting the main loop
+    set_node(*head_a, *head_b);
+
+    // Process stack B until empty
+    while(*head_b)
+    {
+        t_stack *cheapest = find_cheapest(*head_b);
+        move_node(cheapest, head_b, head_a);
+    }
+    
+    // Final rotation to get everything in order
+    // Calculate the smallest element's position first to minimize rotations
+    t_stack *smallest = find_smallest(*head_a);
+    int count = 0;
+    int max_iterations = lst_size(*head_a);
+    
+    while (*head_a != smallest && count < max_iterations)
+    {
+        // Choose the most efficient rotation direction
+        if (smallest->is_o_med == 1)
+            do_rra(head_a);
+        else
+            do_ra(head_a);
+        count++;
+    }
+}
+
 int check_arg(t_stack *head_a)
 {
     t_stack *temp;
@@ -643,7 +689,8 @@ void free_stack(t_stack **head)
     *head = NULL; // Important: mettre le pointeur à NULL après libération
 }
 
-// Fonction principale
+#include <stdio.h>
+
 int main(int ac, char **av)
 {
     t_stack *head_a = NULL;
@@ -654,7 +701,7 @@ int main(int ac, char **av)
     int     i = 0;
     int count = 0;
 
-    // Traitement des arguments
+
     if(ac == 2)
     {
         tableau = ft_split(av[1], ' ');
@@ -722,7 +769,6 @@ int main(int ac, char **av)
     else if (ac < 2)
         return (ft_printf("no arg error\n"));
 
-    // Cas particulier pour les petites listes
     if (lst_size(head_a) <= 3)
     {
         mini_sort(&head_a);
@@ -730,7 +776,6 @@ int main(int ac, char **av)
         return(0);
     }
 
-    // Vérification des doublons
     if (check_arg(head_a))
     {
         free_stack(&head_a);
@@ -739,16 +784,18 @@ int main(int ac, char **av)
         return(ft_printf("Error\n"));
     }
     
-    // Utilisation de l'algorithme optimisé
+    // Use optimized algorithm for larger arrays
     optimized_push_swap(&head_a, &head_b);
-    
-    // Libération de la mémoire
+    //push_swap(&head_a, &head_b);
+
+    // Libérer toute la mémoire allouée
     free_stack(&head_a);
     free_stack(&head_b);
     
     if (tab_int)
         free(tab_int);
         
+    fflush(stdout);  // Vider le buffer de sortie
     return 0;
 }
 
