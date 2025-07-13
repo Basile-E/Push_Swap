@@ -1,26 +1,20 @@
 #include "../Includes/push_swap.h"
 
-void	ra(t_list **stack_a)
+void do_ra(t_stack **head_a)
 {
-    t_list	*first;
-    t_list	*last;
+    rotate(head_a);
+    ft_printf("ra\n");
+}
 
-    // Vérifie si la pile est vide ou contient un seul élément
-    if (!stack_a || !(*stack_a) || !(*stack_a)->next)
-        return ;
+void do_rb(t_stack **head_b)
+{
+    rotate(head_b);
+    ft_printf("rb\n");
+}
 
-    // Sauvegarde du premier élément
-    first = *stack_a;
-
-    // Déplace la tête de la liste au deuxième élément
-    *stack_a = first->next;
-
-    // Déconnecte le premier élément
-    first->next = NULL;
-
-    // Trouve le dernier élément de la liste
-    last = ft_lstlast(*stack_a);
-
-    // Ajoute le premier élément à la fin de la liste
-    last->next = first;
+void do_rr(t_stack **head_a, t_stack **head_b)
+{
+    rotate(head_a);
+    rotate(head_b);
+    ft_printf("rr\n");
 }

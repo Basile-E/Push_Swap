@@ -2,7 +2,7 @@
 #define PUSH_SWAP_H
 
 // Inclusion de la bibliothèque libft
-#include "/home/basile/Documents/Common_Core/Push_Swap/Libft/libft.h"
+#include "../Libft/libft.h"
 #include <limits.h>
 
 

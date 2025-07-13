@@ -2,731 +2,180 @@
 #include "../Libft/libft.h"
 #include "../Includes/push_swap.h"
 
-
-// Fonctions de gestion de liste chaînée
-int lst_print(t_stack *head)
+// Add a function to validate number strings
+static int is_valid_number(char *str)
 {
-    t_stack * temp;
-    temp = head;
-    if (temp == NULL)
-        return(ft_printf("liste Vide\n"));
-
-    while (temp)
-    {
-        ft_printf("%d - ", temp->value);
-        temp = temp->next;
-    }
-    ft_printf("\n");
-}
-t_stack	*lstnew(int content)
-{
-    t_stack *new;
-
-    new = malloc(sizeof(t_stack));
-    if (!new)
-        return (NULL);
-        
-    // Initialiser la valeur demandée
-    new->value = content;
+    int i = 0;
     
-    // Initialiser tous les autres champs à NULL/0
-    new->next = NULL;
-    new->target_node = NULL;
-    new->index = 0;
-    new->targ_index = 0;
-    new->lst_size = 0;
-    new->median = 0;
-    new->med_index = 0;
-    new->targ_med_index = 0;
-    new->is_o_med = 0;
-    new->push_cost = 0;
-    new->rank = 0;
-    
-    return (new);
-}
-
-void	lstadd_front(t_stack **lst, t_stack *new)
-{
-	new->next = *lst;
-	*lst = new;
-}
-
-t_stack	*lstlast(t_stack *lst)
-{
-	if (!lst)
-		return (NULL);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
-}
-
-void	lstadd_back(t_stack **lst, t_stack *new)
-{
-	if (!*lst)
-		*lst = new;
-	else
-		lstlast(*lst)->next = new;
-}
-
-int lst_size(t_stack *head)
-{
-    int i;
-    i = 0;
-    while(head)
-    {
+    // Skip leading whitespace
+    while (str[i] && (str[i] == ' ' || str[i] == '\t'))
         i++;
-        head = head->next;
-    }
-    return (i);
-}
-
-// Fonctions de manipulation des piles
-int pushTo(t_stack **head_from, t_stack **head_to)
-{
-    t_stack *temp;
     
-    if (!*head_from)
-        return (1);
-        
-    temp = *head_from;
-    *head_from = (*head_from)->next;
-    temp->next = NULL;
+    // Handle sign
+    if (str[i] == '-' || str[i] == '+')
+        i++;
     
-    lstadd_front(head_to, temp);
-    return (0); // Success
-}
-
-int rotate(t_stack **head_to_rotate)
-{
-    t_stack *first;
-    t_stack *last;
-
-    if (!*head_to_rotate || !(*head_to_rotate)->next)
+    // Check if there's at least one digit
+    if (!str[i])
         return (0);
-
-    first = *head_to_rotate;
-    last = lstlast(*head_to_rotate);
-
-    *head_to_rotate = first->next; 
-
-    first->next = NULL;
-    last->next = first;
+    
+    // Check that all remaining chars are digits
+    while (str[i])
+    {
+        if (str[i] < '0' || str[i] > '9')
+            return (0);
+        i++;
+    }
+    
     return (1);
 }
 
-int revers_rotate(t_stack **head_to_rotate)
+void    free_tab(char **tableau)
 {
-    t_stack *first;
-    t_stack *last;
-    t_stack *second_to_last;
-
-    if (!*head_to_rotate || !(*head_to_rotate)->next)
-        return (1);
-    first   = *head_to_rotate;
-    last    = lstlast(*head_to_rotate);
-    second_to_last = first;
-    while (second_to_last->next != last)
-        second_to_last = second_to_last->next;
-    second_to_last->next = NULL;
-    last->next = first;
-    *head_to_rotate = last;
-    return (0);
+    int i;
+    i = 0;
+    while (tableau[i])
+        free(tableau[i++]);
+    free(tableau);
 }
 
-int swap(t_stack **head_to_swap)
+// Allocate array and convert strings to integers
+int allocate_and_convert(char **tableau, int **tab_int, int count)
 {
-    t_stack *first;
-    t_stack *second;
+    int i = 0;
     
-    if (!*head_to_swap || !(*head_to_swap)->next)
-        return (1);
-    first = *head_to_swap;
-    second = first->next;
-    first->next = second->next;
-    second->next = first;
-    *head_to_swap = second;
-    return (0);
-}
-
-// Fonctions d'opérations Push Swap
-void do_pa(t_stack **head_a, t_stack **head_b)
-{
-    pushTo(head_b, head_a);
-    ft_printf("pa\n");
-}
-
-void do_pb(t_stack **head_a, t_stack **head_b)
-{
-    pushTo(head_a, head_b);
-    ft_printf("pb\n");
-}
-
-void do_sa(t_stack **head_a)
-{
-    swap(head_a);
-    ft_printf("sa\n");
-}
-
-void do_sb(t_stack **head_b)
-{
-    swap(head_b);
-    ft_printf("sb\n");
-}
-
-void do_ss(t_stack **head_a, t_stack **head_b)
-{
-    swap(head_a);
-    swap(head_b);
-    ft_printf("ss\n");
-}
-
-void do_ra(t_stack **head_a)
-{
-    rotate(head_a);
-    ft_printf("ra\n");
-}
-
-void do_rb(t_stack **head_b)
-{
-    rotate(head_b);
-    ft_printf("rb\n");
-}
-
-void do_rr(t_stack **head_a, t_stack **head_b)
-{
-    rotate(head_a);
-    rotate(head_b);
-    ft_printf("rr\n");
-}
-
-void do_rra(t_stack **head_a)
-{
-    revers_rotate(head_a);
-    ft_printf("rra\n");
-}
-
-void do_rrb(t_stack **head_b)
-{
-    revers_rotate(head_b);
-    ft_printf("rrb\n");
-}
-
-void do_rrr(t_stack **head_a, t_stack **head_b)
-{
-    revers_rotate(head_a);
-    revers_rotate(head_b);
-    ft_printf("rrr\n");
-}
-
-
-// Fonctions utilitaires nécessaires pour optimizer.c
-int is_List_In_Order(t_stack *HeadofList)
-{
-    t_stack *temp;
-
-    if (!HeadofList || !HeadofList->next)
-        return 1;  // Liste vide ou avec un seul élément est triée
-
-    temp = HeadofList->next;
-    while (temp != NULL)  // Correction: vérifier tous les nœuds
+    *tab_int = malloc(sizeof(int) * count);
+    if (!*tab_int)
+        return (ft_printf("Error: memory allocation failed\n") ? 0 : 0);
+    
+    while(tableau[i])
     {
-        if (HeadofList->value > temp->value)
-            return 0;  // Non trié
-        HeadofList = HeadofList->next;
-        temp = temp->next;
-    }
-    return 1;  // Trié
-}
-
-t_stack *Find_Highest(t_stack *head_to_find)
-{
-    t_stack *temp;
-
-    if (!head_to_find)
-        return NULL;
-    temp = head_to_find;
-    while(head_to_find->next != NULL)
-    {
-        head_to_find = head_to_find->next;
-        if (temp->value < head_to_find->value)
-            temp = head_to_find;
-    }
-    return (temp);
-}
-int mini_sort(t_stack **head_to_sort)
-{
-    // il faut trouver le plus grand dans les trois, est-ce qu'il est au debut de la liste ? mais si il est au second emplacement ?
-    // assume qu'il etais en haut, on l'envoi en bas avec rotate, maintenant on sait que le plus grand est en bas
-    // on compare les deux neud restant pour savoir le quel est le plus grand
-    //
-    // Fonctions : 
-    // Find biggest
-    // Compare_Node(head; head->next)
-
-    t_stack *hightest_node;
-    int size = lst_size(*head_to_sort);
-    
-    // Cas où il n'y a pas d'éléments ou un seul élément (déjà trié)
-    if (size <= 1)
-        return (0);
-        
-    // Cas où il y a exactement 2 éléments
-    if (size == 2) {
-        if ((*head_to_sort)->value > (*head_to_sort)->next->value)
-            do_sa(head_to_sort);
-        return (0);
-    }
-    
-    // Cas où il y a exactement 3 éléments
-    if (size == 3) {
-        hightest_node = Find_Highest(*head_to_sort);
-        if (*head_to_sort == hightest_node)
-            do_ra(head_to_sort);
-        else if ((*head_to_sort)->next == hightest_node)
-            do_rra(head_to_sort);
-            
-        // Vérifier si les deux premiers éléments sont dans l'ordre
-        if ((*head_to_sort)->value > (*head_to_sort)->next->value)
-            do_sa(head_to_sort);
-    }
-    
-    return (0);
-}
-
-t_stack *find_smallest(t_stack *head_to_find)
-{
-    t_stack *head_temp;
-    t_stack *smallest;
-    int small;
-
-    if (!head_to_find)
-        return NULL;
-    smallest = head_to_find;
-    small = __INT_MAX__;
-    head_temp = head_to_find;
-    while(head_temp->next != NULL)
-    {
-        if (head_temp->value < small)
+        if (!is_valid_number(tableau[i]))
         {
-            small = head_temp->value;
-            smallest = head_temp;
-        } 
-        head_temp = head_temp->next;
+            free(*tab_int);
+            return (ft_printf("Error: invalid number format\n") ? 0 : 0);
+        }
+        (*tab_int)[i] = ft_atoi(tableau[i]);
+        i++;
     }
-    if (small >= __INT_MAX__)
-        smallest = NULL;
-    return (smallest);
+    return (1);
 }
 
-// Fonction push_swap classique (utilisée par optimizer.c pour les petites listes)
-void push_swap(t_stack **head_a, t_stack **head_b)
+// Create stack from integer array
+int create_stack_from_array(int *array, int count, t_stack **head)
 {
-    // Push everything except 3 elements to stack B
-    while(lst_size(*head_a) > 3)
-        do_pb(head_a, head_b);
+    int i = 0;
+    t_stack *temp;
     
-    // Sort the 3 remaining elements in stack A
-    mini_sort(head_a);
-    
-    // Initialize node data once before starting the main loop
-    set_node(*head_a, *head_b);
-
-    // Process stack B until empty
-    while(*head_b)
+    while(i < count)
     {
-        t_stack *cheapest = find_cheapest(*head_b);
-        move_node(cheapest, head_b, head_a);
+        temp = lstnew(array[i]);
+        if(!temp)
+        {
+            free_stack(head);
+            return (ft_printf("Error: linked list initialization failed\n"));
+        }
+        lstadd_back(head, temp);
+        i++;
     }
-    
-    // Final rotation to get everything in order
-    t_stack *smallest = find_smallest(*head_a);
+    return (0);
+}
+
+// Parse a single string containing multiple numbers
+int parse_string_arg(char *arg, t_stack **head_a, int **tab_int)
+{
+    char **tableau = NULL;
     int count = 0;
-    int max_iterations = lst_size(*head_a);
+    int i = 0;
+    t_stack *temp;
+
+    tableau = ft_split(arg, ' ');
+    if (!tableau)
+        return (ft_printf("Error: ft_split failed\n"));
     
-    while (*head_a != smallest && count < max_iterations)
-    {
-        // Choose the most efficient rotation direction
-        if (smallest->is_o_med == 1)
-            do_rra(head_a);
-        else
-            do_ra(head_a);
+    // Count elements and validate minimum input
+    while (tableau[count])
         count++;
+    if (count == 1)
+    {
+        free_tab(tableau);
+        return (ft_printf("Error: only one number in input\n"));
     }
+
+    // Allocate integer array and convert strings to ints
+    if (!allocate_and_convert(tableau, tab_int, count))
+    {
+        free_tab(tableau);
+        return (1); // Error already printed in allocate_and_convert
+    }
+
+    free_tab(tableau);
+    
+    // Create linked list nodes
+    return create_stack_from_array(*tab_int, count, head_a);
 }
 
-// Fonctions nécessaires pour push_swap
-void set_target_node(t_stack *head_a, t_stack *head_b)
-{
-    t_stack    *current_a;
-    t_stack    *current_b;
-    t_stack    *target_node;
-    long        target_index;
 
-    current_b = head_b;
-    while(current_b != NULL)
+
+
+
+// Parse multiple command line arguments
+int parse_multiple_args(char **args, int count, t_stack **head)
+{
+    int i = 0;
+    t_stack *temp;
+    
+    while (i < count)
     {
-        target_index = __LONG_MAX__;
-        current_a = head_a;
-        while(current_a != NULL)
+        if (!is_valid_number(args[i]))
         {
-            if ((current_a->value > current_b->value) && (current_a->value < target_index))
-            {
-                target_index = current_a->value;
-                target_node = current_a;
-            }
-            current_a = current_a->next;
+            free_stack(head);
+            return (ft_printf("Error: invalid number format\n"));
         }
-        if (target_index == __LONG_MAX__)
-            current_b->target_node = find_smallest(head_a);
-        else
-            current_b->target_node = target_node;
-        current_b = current_b->next;
-    }
-}
-
-void set_index(t_stack *head)
-{
-    t_stack *temp;
-    int     index;
-
-    index = 0;
-    temp = head;
-    while (temp)
-    {
-        temp->index = index;
-        index++;
-        temp = temp->next;
-    }
-}
-void set_target_index(t_stack *head)
-{
-    t_stack *temp;
-    
-    temp = head;
-    while(temp)
-    {
-        temp->targ_index = temp->target_node->index;
-        temp = temp->next;
-    }
-}
-
-void set_median(t_stack *head)
-{
-    t_stack *temp;
-    int     mediane;
-
-    temp = head;
-    temp->lst_size = lst_size(temp);
-    mediane = temp->lst_size / 2;
-    while(temp)
-    {
-        temp->median = mediane;
-        temp = temp->next;
-    }
-}
-
-void set_index_median(t_stack *head)
-{
-    t_stack *temp;
-    
-    temp = head;
-    while(temp)
-    {
-        if (temp->index >= temp->median)  // Changé de > à >=
+            
+        temp = lstnew(ft_atoi(args[i]));
+        if(!temp)
         {
-            // Attention à bien calculer la distance depuis la fin
-            temp->med_index = temp->lst_size - 1 - temp->index;
-            temp->is_o_med = 1;
+            free_stack(head);
+            return (ft_printf("Error: linked list initialization failed\n"));
         }
-        else
-        {
-            temp->med_index = temp->index;
-            temp->is_o_med = 0;
-        }
-        temp = temp->next;
+        lstadd_back(head, temp);
+        i++;
     }
+    return (0);
 }
 
-void set_targ_med(t_stack *head)
-{
-    t_stack *temp;
-
-    temp = head;
-    while(temp)
-    {
-        temp->targ_med_index = temp->target_node->med_index;
-        temp = temp->next;
-    }
-}
-
-void set_push_cost(t_stack *head_a, t_stack *head_b)
-{
-    t_stack *temp_a;
-    t_stack *temp_b;
-
-    temp_a = head_a;
-    temp_b = head_b;
-    while(temp_b)
-    {
-
-        if ((temp_a->is_o_med && temp_b->is_o_med) || (temp_a->is_o_med == 0 && temp_b->is_o_med == 0))
-        {
-            if (temp_a->med_index > temp_b->med_index)
-                temp_b->push_cost = temp_a->med_index;
-            else
-                temp_b->push_cost = temp_b->med_index;
-        }
-        else
-            temp_b->push_cost = temp_b->index + temp_b->targ_index;
-        temp_b = temp_b->next;
-    }
-}
-
-t_stack *find_cheapest(t_stack *head_b)
-{
-    t_stack *temp;
-    t_stack *cheapest;
-
-    temp = head_b;
-    cheapest = head_b;
-    while(temp)
-    {
-        if (temp->push_cost < cheapest->push_cost)
-            cheapest = temp;
-        temp = temp->next;
-    }
-    return (cheapest);
-}
-
-void set_node(t_stack *head_a, t_stack *head_b)
-{
-    set_target_node(head_a, head_b);
-    //ft_printf("test :\n set_target_node node value = %i\n",head_b->target_node->value);
-    set_index(head_a);
-    set_index(head_b);
-    //ft_printf("test :\n set index, idex a & b = a:%i\n",head_a->next->index);
-    set_target_index(head_b);
-    //ft_printf("test :\n set target index, targ index = %i\n",head_b->targ_index);
-    set_median(head_a);
-    set_median(head_b);
-    //ft_printf("test :\n set median = %i\n",head_b->median);
-    set_index_median(head_b);
-    set_index_median(head_a);
-    //ft_printf("test :\n set index median = %i\n", head_b->med_index);
-    set_targ_med(head_b);
-    //ft_printf("test :\n set targ median = %i\n",head_b->targ_med_index);
-}
-
-void move_node(t_stack *cheapest, t_stack **head_b, t_stack **head_a)
-{
-    int common_moves; // Nombre de mouvements simultanés (rr/rrr)
-    int diff_a = 0;   // Nombre de mouvements individuels pour A
-    int diff_b = 0;   // Nombre de mouvements individuels pour B
-    int max_iterations; // Limite pour éviter les boucles infinies
-    
-    // Calculer une seule fois avant les opérations
-    set_node(*head_a, *head_b);
-    
-    // Déterminer combien de mouvements communs et différentiels sont nécessaires
-    if (cheapest->is_o_med == cheapest->target_node->is_o_med) {
-        // Même direction (les deux au-dessus ou en-dessous de la médiane)
-        common_moves = (cheapest->med_index < cheapest->targ_med_index) 
-                      ? cheapest->med_index : cheapest->targ_med_index;
-        
-        // Calculer le reste des mouvements différentiels
-        diff_a = cheapest->targ_med_index - common_moves;
-        diff_b = cheapest->med_index - common_moves;
-    } else {
-        // Directions opposées, pas de mouvements communs
-        common_moves = 0;
-        diff_a = cheapest->targ_med_index;
-        diff_b = cheapest->med_index;
-    }
-    
-    // Effectuer les mouvements communs
-    while (common_moves > 0) {
-        if (cheapest->is_o_med == 1) {
-            do_rrr(head_a, head_b);
-        } else {
-            do_rr(head_a, head_b);
-        }
-        common_moves--;
-    }
-    
-    // Effectuer les mouvements différentiels pour A
-    while (diff_a > 0) {
-        if (cheapest->target_node->is_o_med == 1) {
-            do_rra(head_a);
-        } else {
-            do_ra(head_a);
-        }
-        diff_a--;
-    }
-    
-    // Effectuer les mouvements différentiels pour B
-    while (diff_b > 0) {
-        if (cheapest->is_o_med == 1) {
-            do_rrb(head_b);
-        } else {
-            do_rb(head_b);
-        }
-        diff_b--;
-    }
-    
-    // Recalculer une seule fois après toutes les opérations principales
-    set_node(*head_a, *head_b);
-    
-    // Validation finale avec limite d'itérations
-    max_iterations = lst_size(*head_b) + lst_size(*head_a); // Limite raisonnable
-    int count = 0;
-    
-    if (cheapest != *head_b) {
-        while (cheapest != *head_b && count < max_iterations) {
-            if (cheapest->is_o_med == 1)
-                do_rrb(head_b);
-            else
-                do_rb(head_b);
-            count++;
-        }
-    }
-    
-    count = 0;
-    if (cheapest->target_node != *head_a) {
-        while (cheapest->target_node != *head_a && count < max_iterations) {
-            if (cheapest->target_node->is_o_med == 1)
-                do_rra(head_a);
-            else
-                do_ra(head_a);
-            count++;
-        }
-    }
-    
-    do_pa(head_a, head_b);
-}
-
-
-// Fonctions de vérification et utilitaires
-int check_arg(t_stack *head_a)
-{
-    t_stack *temp;
-    if (!head_a)
-        return(-1);
-    while(head_a->next)
-    {
-        temp = head_a->next;
-        while (temp)
-        {
-            if (head_a->value == temp->value)
-                return(1);
-            temp = temp->next;
-        }
-        head_a = head_a->next;
-    }
-    return(0);
-}
-
-void free_stack(t_stack **head)
-{
-    t_stack *temp;
-    t_stack *current;
-    
-    if (!head || !*head)
-        return;
-        
-    current = *head;
-    while (current)
-    {
-        temp = current;
-        current = current->next;
-        free(temp);
-    }
-    *head = NULL; // Important: mettre le pointeur à NULL après libération
-}
-
-// Fonction principale
 int main(int ac, char **av)
 {
     t_stack *head_a = NULL;
     t_stack *head_b = NULL;
-    t_stack *temp;
-    char    **tableau = NULL;
-    int     *tab_int = NULL;
-    int     i = 0;
-    int count = 0;
-
-    // Traitement des arguments
-    if(ac == 2)
+    int *tab_int = NULL;
+    int error_code = 0;
+    
+    // Process command line arguments
+    if (ac == 2)
     {
-        tableau = ft_split(av[1], ' ');
-        if (!tableau)
-            return (ft_printf("Erreur : ft_split a échoué\n"));
-            
-        // Compter le nombre d'éléments
-        while (tableau[count])
-            count++;
-            
-        // Allouer de la mémoire pour tab_int MAINTENANT
-        tab_int = malloc(sizeof(int) * count);
-        if (!tab_int)
-        {
-            // Nettoyer tableau avant de quitter
-            i = 0;
-            while (tableau[i])
-                free(tableau[i++]);
-            free(tableau);
-            return (ft_printf("Erreur : allocation mémoire échouée\n"));
-        }
-        
-        // passe d'un tableau de char a une liste d'int
-        i = 0;
-        while(tableau[i])
-        {
-            tab_int[i] = ft_atoi(tableau[i]);
-            i++;
-        }
-
-        // Libérer la mémoire de tableau qui devient useless 
-        i = 0;
-        while (tableau[i])
-            free(tableau[i++]);
-        free(tableau);
-        i = 0;
-        while(i < count)
-        {
-            temp = lstnew(tab_int[i]);
-            if(!temp)
-            {
-                free(tab_int);
-                free_stack(&head_a);
-                return(ft_printf("Error during linked list init\n"));
-            }
-            lstadd_back(&head_a, temp);
-            i++;
-        }
+        error_code = parse_string_arg(av[1], &head_a, &tab_int);
+        if (error_code)
+            return (error_code);
     }
     else if (ac > 2)
     {
-        i = 1;
-        while (av[i])
-        {
-            temp = lstnew(ft_atoi(av[i]));
-            if(!temp)
-            {
-                free_stack(&head_a);
-                return(ft_printf("Error during linked list init\n"));
-            }
-            lstadd_back(&head_a, temp);
-            i++;
-        }
+        error_code = parse_multiple_args(av + 1, ac - 1, &head_a);
+        if (error_code)
+            return (error_code);
     }
-    else if (ac < 2)
-        return (ft_printf("no arg error\n"));
-
+    else
+        return (ft_printf("Error: no arguments provided\n"));
+    
     // Cas particulier pour les petites listes
     if (lst_size(head_a) <= 3)
     {
         mini_sort(&head_a);
         free_stack(&head_a);
+        free_stack(&head_b);
+        if (tab_int)
+            free(tab_int);
         return(0);
     }
 

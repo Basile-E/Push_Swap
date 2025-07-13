@@ -1,4 +1,4 @@
-NAME			= Push_Swap
+NAME			= push_swap
 
 #		Couleurs		#
 
@@ -15,8 +15,7 @@ MAGENTA         = \033[0;35m
 
 CC 				= cc
 REMOVE 			= rm -f
-STANDARD_FLAGS 	= 
-MINILIBX_FLAGS	= -Lmlx_linux -lmlx -lXext -lX11
+STANDARD_FLAGS 	= -g
 GDB_FLAGS		= -g3
 VALGRIND		= @valgrind --leak-check=full --show-leak-kinds=all \
 --track-origins=yes --quiet --tool=memcheck --keep-debuginfo=yes
@@ -31,7 +30,8 @@ SRCS 			= $(addprefix $(SRCS_DIR),\
                 main.c \
                 optimizer.c)
 UTILS			= $(addprefix $(UTILS_DIR), \
-                ra_rb.c)
+                lst.c movements.c pa_pb.c ra_rb.c rra_rrb.c \
+				sa_sb.c set_nodes.c utils.c)
 LIBFT           = $(LIBFT_DIR)libft.a
 
 #		Fonction		#	
@@ -76,7 +76,7 @@ gdb_test:
 				gdb ./Test
 
 run:
-				${VALGRIND} ./${NAME} Map/sophie.ber
+				${VALGRIND} ./${NAME} 1
 
 re:				fclean all
 
