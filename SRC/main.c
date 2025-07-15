@@ -136,14 +136,53 @@ int parse_multiple_args(char **args, int count, t_stack **head)
     return (0);
 }
 
+void    free_all(t_stack **head_a, t_stack **head_b, int *tab_int)
+{
+    if (head_a)
+        free_stack(head_a);
+    if (head_b)
+        free_stack(head_b);
+    if (tab_int)
+        free(tab_int);
+}
+
+int sort_five_elements(t_stack **head_a, t_stack **head_b)
+{
+    t_stack *smallest;
+    int pos;
+    int size;
+    
+    size = lst_size(*head_a);
+    if (size <= 3)
+        return (mini_sort(head_a));
+    while (size > 3)
+    {
+        smallest = find_smallest(*head_a);
+        pos = get_element_position(*head_a, smallest->value);
+        if (pos == 1)
+            do_ra(head_a);
+        else if (pos >= size / 2)
+            do_rra(head_a);
+        else if (pos == 2)
+        {
+            do_ra(head_a);
+            do_ra(head_a);
+        }
+        do_pb(head_a, head_b);
+        size--;
+    }
+    mini_sort(head_a);  // Max 2 mouvements pour 3 éléments
+    do_pa(head_a, head_b);  // 1 mouvement
+    do_pa(head_a, head_b);  // 1 mouvement
+    return (0);
+}
+
 int main(int ac, char **av)
 {
     t_stack *head_a = NULL;
     t_stack *head_b = NULL;
     int *tab_int = NULL;
     int error_code = 0;
-    
-    // Process command line arguments
     if (ac == 2)
     {
         error_code = parse_string_arg(av[1], &head_a, &tab_int);
@@ -158,37 +197,25 @@ int main(int ac, char **av)
     }
     else
         return (ft_printf("Error: no arguments provided\n"));
-    
-    // Cas particulier pour les petites listes
     if (lst_size(head_a) <= 3)
     {
         mini_sort(&head_a);
-        free_stack(&head_a);
-        free_stack(&head_b);
-        if (tab_int)
-            free(tab_int);
+        free_all(&head_a, &head_b, tab_int);
         return(0);
     }
-
-    // Vérification des doublons
     if (check_arg(head_a))
     {
-        free_stack(&head_a);
-        if (tab_int)
-            free(tab_int);
+        free_all(&head_a, &head_b, tab_int);
         return(ft_printf("Error\n"));
     }
-    
-    // Utilisation de l'algorithme optimisé
+    if (lst_size(head_a) <= 5)  // Changé de 3 à 5
+    {
+        sort_five_elements(&head_a, &head_b);
+        free_all(&head_a, &head_b, tab_int);
+    return(0);
+    }
     optimized_push_swap(&head_a, &head_b);
-    
-    // Libération de la mémoire
-    free_stack(&head_a);
-    free_stack(&head_b);
-    
-    if (tab_int)
-        free(tab_int);
-        
+    free_all(&head_a, &head_b, tab_int);
     return 0;
 }
 

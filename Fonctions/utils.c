@@ -27,35 +27,6 @@ int mini_sort(t_stack **head_to_sort)
     return (0);
 }
 
-void push_swap(t_stack **head_a, t_stack **head_b)
-{
-    t_stack *cheapest;
-    t_stack *smallest;
-    int count;
-    int max_iterations;
-
-    while(lst_size(*head_a) > 3)
-        do_pb(head_a, head_b);
-    mini_sort(head_a);
-    set_node(*head_a, *head_b);
-    while(*head_b)
-    {
-        cheapest = find_cheapest(*head_b);
-        move_node(cheapest, head_b, head_a);
-    }
-    smallest = find_smallest(*head_a);
-    count = 0;
-    max_iterations = lst_size(*head_a);
-    while (*head_a != smallest && count < max_iterations)
-    {
-        if (smallest->is_o_med == 1)
-            do_rra(head_a);
-        else
-            do_ra(head_a);
-        count++;
-    }
-}
-
 int check_arg(t_stack *head_a)
 {
     t_stack *temp;

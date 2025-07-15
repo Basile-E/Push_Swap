@@ -63,8 +63,7 @@ void				print_debug(t_stack *head);
 void				push_swap(t_stack **head_a, t_stack **head_b);
 int					check_arg(t_stack *head_a);
 void				free_stack(t_stack **head);
-
-// New optimized functions
+int 				find_best_chunk_element(t_stack *head_a, int chunk_start, int chunk_end);
 void				optimized_push_swap(t_stack **head_a, t_stack **head_b);
 int					get_chunk_count(int size);
 void				push_in_chunks(t_stack **head_a, t_stack **head_b);
@@ -74,4 +73,10 @@ void				optimized_push_cost(t_stack *head_a, t_stack *head_b);
 void				assign_ranks(t_stack *head);
 void				move_to_top(t_stack **stack, int pos, int size,
 						int is_stack_a);
+int 				get_rotate_cost(int pos, int size);
+void 				final_positioning(t_stack *cheapest, t_stack **head_a, t_stack **head_b);
+void 				calculate_move_costs(t_stack *head_a, t_stack *head_b, int *costs);
+void 				execute_move(t_stack **head_a, t_stack **head_b, int pos_b);
+void 				push_chunk_to_b(t_stack **head_a, t_stack **head_b, int chunk_start, int chunk_end);
+int 				get_element_position(t_stack *stack, int value);
 #endif
