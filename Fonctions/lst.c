@@ -1,6 +1,5 @@
 #include "../Includes/push_swap.h"
 
-
 // Fonctions de gestion de liste chaînée
 int lst_print(t_stack *head)
 {
@@ -23,11 +22,7 @@ t_stack	*lstnew(int content)
     new = malloc(sizeof(t_stack));
     if (!new)
         return (NULL);
-        
-    // Initialiser la valeur demandée
     new->value = content;
-    
-    // Initialiser tous les autres champs à NULL/0
     new->next = NULL;
     new->target_node = NULL;
     new->index = 0;
@@ -83,17 +78,16 @@ int is_List_In_Order(t_stack *HeadofList)
     t_stack *temp;
 
     if (!HeadofList || !HeadofList->next)
-        return 1;  // Liste vide ou avec un seul élément est triée
-
+        return (1);
     temp = HeadofList->next;
-    while (temp != NULL)  // Correction: vérifier tous les nœuds
+    while (temp != NULL)
     {
         if (HeadofList->value > temp->value)
-            return 0;  // Non trié
+            return (0);
         HeadofList = HeadofList->next;
         temp = temp->next;
     }
-    return 1;  // Trié
+    return (1);
 }
 
 

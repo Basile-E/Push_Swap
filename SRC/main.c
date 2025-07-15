@@ -84,16 +84,16 @@ int create_stack_from_array(int *array, int count, t_stack **head)
 // Parse a single string containing multiple numbers
 int parse_string_arg(char *arg, t_stack **head_a, int **tab_int)
 {
-    char **tableau = NULL;
-    int count = 0;
-    int i = 0;
+    char **tableau;
+    int count;
+    int i;
     t_stack *temp;
 
+    i = 0;
+    count = 0;
     tableau = ft_split(arg, ' ');
     if (!tableau)
         return (ft_printf("Error: ft_split failed\n"));
-    
-    // Count elements and validate minimum input
     while (tableau[count])
         count++;
     if (count == 1)
@@ -101,23 +101,14 @@ int parse_string_arg(char *arg, t_stack **head_a, int **tab_int)
         free_tab(tableau);
         return (ft_printf("Error: only one number in input\n"));
     }
-
-    // Allocate integer array and convert strings to ints
     if (!allocate_and_convert(tableau, tab_int, count))
     {
         free_tab(tableau);
-        return (1); // Error already printed in allocate_and_convert
+        return (1);
     }
-
     free_tab(tableau);
-    
-    // Create linked list nodes
     return create_stack_from_array(*tab_int, count, head_a);
 }
-
-
-
-
 
 // Parse multiple command line arguments
 int parse_multiple_args(char **args, int count, t_stack **head)

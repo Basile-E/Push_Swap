@@ -80,9 +80,8 @@ void set_index_median(t_stack *head)
     temp = head;
     while(temp)
     {
-        if (temp->index >= temp->median)  // Changé de > à >=
+        if (temp->index >= temp->median)
         {
-            // Attention à bien calculer la distance depuis la fin
             temp->med_index = temp->lst_size - 1 - temp->index;
             temp->is_o_med = 1;
         }
