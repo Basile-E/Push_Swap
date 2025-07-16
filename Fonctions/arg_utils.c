@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:52:11 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/07/16 11:55:06 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:10:58 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,20 +90,40 @@ int	parse_arguments_and_create_stack(int ac, char **av, t_stack **head_a,
 	return (0);
 }
 
-int	is_valid_number(char *str)
+static int	skip_whitespace_and_sign(char *str, int *sign)
 {
 	int	i;
 
 	i = 0;
+	*sign = 1;
 	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			*sign = -1;
 		i++;
+	}
+	return (i);
+}
+
+int	is_valid_number(char *str)
+{
+	int		i;
+	int		sign;
+	long	result;
+
+	result = 0;
+	i = skip_whitespace_and_sign(str, &sign);
 	if (!str[i])
 		return (0);
 	while (str[i])
 	{
 		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		result = result * 10 + (str[i] - '0');
+		if ((sign == 1 && result > INT_MAX) || (sign == -1
+				&& result > 2147483648LL))
 			return (0);
 		i++;
 	}
