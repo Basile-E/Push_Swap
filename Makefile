@@ -31,7 +31,8 @@ SRCS 			= $(addprefix $(SRCS_DIR),\
 UTILS			= $(addprefix $(UTILS_DIR), \
                 lst.c movements.c pa_pb.c ra_rb.c rra_rrb.c \
 				sa_sb.c set_nodes.c utils.c chunk_utils.c lst_utils.c \
-				mov_utils.c nodes_utils.c positions.c push_swap_utils.c push_swap.c rank.c)
+				mov_utils.c nodes_utils.c positions.c push_swap_utils.c push_swap.c \
+				rank.c arg_utils.c main_utils.c)
 LIBFT           = $(LIBFT_DIR)libft.a
 
 #		Fonction		#	
