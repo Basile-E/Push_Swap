@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:52:11 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/07/16 13:10:58 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/07/17 09:52:14 by basile           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int	parse_string_arg(char *arg, t_stack **head_a, int **tab_int)
 	if (count == 1)
 	{
 		free_tab(tableau);
-		return (ft_printf("Error:\nonly one number in input\n"));
+		return (0);
 	}
 	if (!allocate_and_convert(tableau, tab_int, count))
 	{
 		free_tab(tableau);
-		return (1);
+		return (0);
 	}
 	free_tab(tableau);
 	return (create_stack_from_array(*tab_int, count, head_a));
@@ -84,9 +84,9 @@ int	parse_arguments_and_create_stack(int ac, char **av, t_stack **head_a,
 			return (error_code);
 	}
 	else
-		return (ft_printf("Error:\nno arguments provided\n"));
+		return (0);
 	if (check_arg(*head_a))
-		return (ft_printf("Error:\nerror while check_arg"));
+		return (ft_printf("Error:\nerror while check_arg\n"));
 	return (0);
 }
 

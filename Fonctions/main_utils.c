@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 12:15:15 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/07/16 12:20:32 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/07/17 10:08:11 by basile           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	free_tab(char **tableau)
 	free(tableau);
 }
 
-// Allocate array and convert strings to integers
 int	allocate_and_convert(char **tableau, int **tab_int, int count)
 {
 	int	i;
@@ -37,18 +36,13 @@ int	allocate_and_convert(char **tableau, int **tab_int, int count)
 	while (tableau[i])
 	{
 		if (!is_valid_number(tableau[i]))
-		{
-			free(*tab_int);
-			ft_printf("Error: invalid number format\n");
 			return (0);
-		}
 		(*tab_int)[i] = ft_atoi(tableau[i]);
 		i++;
 	}
 	return (1);
 }
 
-// Create stack from integer array
 int	create_stack_from_array(int *array, int count, t_stack **head)
 {
 	int		i;
@@ -69,8 +63,6 @@ int	create_stack_from_array(int *array, int count, t_stack **head)
 	return (0);
 }
 
-// Parse a single string containing multiple numbers
-
 void	free_all(t_stack **head_a, t_stack **head_b, int *tab_int)
 {
 	if (head_a)
@@ -81,9 +73,6 @@ void	free_all(t_stack **head_a, t_stack **head_b, int *tab_int)
 		free(tab_int);
 }
 
-// Parse arguments and create the linked list
-
-// Sort the linked list based on its size
 int	sort_stack(t_stack **head_a, t_stack **head_b)
 {
 	int	size;
