@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:52:11 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/07/17 09:52:14 by basile           ###   ########.fr       */
+/*   Updated: 2025/07/18 11:46:32 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@ int	parse_string_arg(char *arg, t_stack **head_a, int **tab_int)
 	count = 0;
 	tableau = ft_split(arg, ' ');
 	if (!tableau)
-		return (ft_printf("Error:\nft_split failed\n"));
+		return (ft_printf("Error\n"), 1);
 	while (tableau[count])
 		count++;
 	if (count == 1)
 	{
-		free_tab(tableau);
-		return (0);
+		if (!is_valid_number(tableau[0]))
+			return (free_tab(tableau), ft_printf("Error\n"), 1);
+		return (free_tab(tableau), 0);
 	}
 	if (!allocate_and_convert(tableau, tab_int, count))
 	{
@@ -51,13 +52,13 @@ int	parse_multiple_args(char **args, int count, t_stack **head)
 		if (!is_valid_number(args[i]))
 		{
 			free_stack(head);
-			return (ft_printf("Error:\ninvalid number format\n"));
+			return (ft_printf("Error\n", 1));
 		}
 		temp = lstnew(ft_atoi(args[i]));
 		if (!temp)
 		{
 			free_stack(head);
-			return (ft_printf("Error:\nlinked list initialization failed\n"));
+			return (ft_printf("Error\n"), 1);
 		}
 		lstadd_back(head, temp);
 		i++;
@@ -85,8 +86,8 @@ int	parse_arguments_and_create_stack(int ac, char **av, t_stack **head_a,
 	}
 	else
 		return (0);
-	if (check_arg(*head_a))
-		return (ft_printf("Error:\nerror while check_arg\n"));
+	if (*head_a && check_arg(*head_a))
+		return (ft_printf("Error\n", 1));
 	return (0);
 }
 

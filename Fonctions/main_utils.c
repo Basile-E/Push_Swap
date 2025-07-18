@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 12:15:15 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/07/17 10:08:11 by basile           ###   ########.fr       */
+/*   Updated: 2025/07/18 10:54:27 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	create_stack_from_array(int *array, int count, t_stack **head)
 		if (!temp)
 		{
 			free_stack(head);
-			return (ft_printf("Error: linked list initialization failed\n"));
+			return (ft_printf("Error\n"));
 		}
 		lstadd_back(head, temp);
 		i++;
