@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 12:36:39 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/07/16 12:38:39 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/07/18 16:12:07 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,6 @@ void	process_chunks(t_stack **head_a, t_stack **head_b, int size)
 void	optimized_push_swap(t_stack **head_a, t_stack **head_b)
 {
 	int	size;
-	int	chunk_count;
-	int	chunk_size;
-	int	chunk_start;
-	int	chunk_end;
 
 	size = lst_size(*head_a);
 	if (is_list_in_order(*head_a))

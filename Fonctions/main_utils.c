@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 12:15:15 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/07/18 10:54:27 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/07/18 16:02:17 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	allocate_and_convert(char **tableau, int **tab_int, int count)
 	*tab_int = malloc(sizeof(int) * count);
 	if (!*tab_int)
 	{
-		ft_printf("Error: memory allocation failed\n");
+		ft_printf("Error:\n");
 		return (0);
 	}
 	while (tableau[i])

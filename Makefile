@@ -15,7 +15,7 @@ MAGENTA         = \033[0;35m
 
 CC 				= cc
 REMOVE 			= rm -f
-STANDARD_FLAGS 	= -g
+STANDARD_FLAGS 	= -g -Wall -Wextra -Werror
 GDB_FLAGS		= -g3
 VALGRIND		= @valgrind --leak-check=full --show-leak-kinds=all \
 --track-origins=yes --quiet --tool=memcheck --keep-debuginfo=yes
@@ -44,27 +44,12 @@ ${LIBFT}:
 
 ${NAME}:        
 				${CC} ${SRCS} ${UTILS} ${LIBFT} ${STANDARD_FLAGS} ${MINILIBX_FLAGS} -o ${NAME}
-
-				@echo "$(TEAL)░░      ░░░░      ░░░░░░░░░  ░░░░░░░░░      ░░░   ░░░  ░░░      ░░$(RESET)"
-				@echo "$(CYAN)▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  $(TEAL)▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒    ▒▒  ▒▒  ▒▒▒▒▒▒▒$(RESET)"
-				@echo "$(MAGENTA)▓▓      ▓▓▓  $(CYAN)▓▓▓▓  ▓▓▓▓▓▓▓▓  $(TEAL)▓▓▓▓▓▓▓▓  ▓▓▓▓  ▓▓  ▓  ▓  ▓▓  ▓▓▓   ▓$(RESET)"
-				@echo "$(PURPLE)███████  $(MAGENTA)██  ████  ████████  $(CYAN)████████  ████  ██  ██    ██  ████  █$(RESET)"
-				@echo "$(PURPLE)██      ████      █████████        ███      ███  ███   ███      ██$(RESET)"
-				@echo "						$(GREEN)....is now ready to run!$(RESET)"
-
 clean:
 				${REMOVE} ${NAME} Test
 				@echo "$(TEAL)Cleaning object files and temporary files...$(RESET)"
 
 fclean:
 				${REMOVE} ${NAME} Test
-				@echo "$(TEAL)░░      ░░░░      ░░░░░░░░░  ░░░░░░░░░      ░░░   ░░░  ░░░      ░░$(RESET)"
-				@echo "$(CYAN)▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  $(TEAL)▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒    ▒▒  ▒▒  ▒▒▒▒▒▒▒$(RESET)"
-				@echo "$(MAGENTA)▓▓      ▓▓▓  $(CYAN)▓▓▓▓  ▓▓▓▓▓▓▓▓  $(TEAL)▓▓▓▓▓▓▓▓  ▓▓▓▓  ▓▓  ▓  ▓  ▓▓  ▓▓▓   ▓$(RESET)"
-				@echo "$(PURPLE)███████  $(MAGENTA)██  ████  ████████  $(CYAN)████████  ████  ██  ██    ██  ████  █$(RESET)"
-				@echo "$(PURPLE)██      ████      █████████        ███      ███  ███   ███      ██$(RESET)"
-				@echo "						$(GREEN)....is now clean, See you soon!$(RESET)"
-
 gdb:
 				${CC} ${SRCS} ${UTILS} ${LIBFT} ${STANDARD_FLAGS} ${GDB_FLAGS} ${MINILIBX_FLAGS} -o ${NAME}
 				gdb ./${NAME}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chunk_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: basile <basile@student.42.fr>              +#+  +:+       +#+        */
+/*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:55:30 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/07/17 10:08:31 by basile           ###   ########.fr       */
+/*   Updated: 2025/07/18 16:14:50 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	find_smallest_position(t_stack *head_a)
 }
 
 // Trouve la position où insérer un élément de B dans A
-int	find_target_position(t_stack *head_a, int value, int size_a)
+int	find_target_position(t_stack *head_a, int value)
 {
 	t_stack	*current;
 	int		target_pos;
@@ -98,8 +98,8 @@ void	calculate_move_costs(t_stack *head_a, t_stack *head_b, int *costs)
 	while (current)
 	{
 		costs[pos_b] = get_rotate_cost(pos_b, size_b)
-			+ get_rotate_cost(find_target_position(head_a, current->value,
-					size_a), size_a);
+			+ get_rotate_cost(find_target_position(head_a, current->value),
+				size_a);
 		pos_b++;
 		current = current->next;
 	}
@@ -122,7 +122,7 @@ void	execute_move(t_stack **head_a, t_stack **head_b, int pos_b)
 		current = current->next;
 	if (!current)
 		return ;
-	target_pos = find_target_position(*head_a, current->value, size_a);
+	target_pos = find_target_position(*head_a, current->value);
 	move_to_top(head_a, target_pos, size_a, 1);
 	move_to_top(head_b, pos_b, size_b, 0);
 	do_pa(head_a, head_b);

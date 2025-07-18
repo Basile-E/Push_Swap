@@ -6,7 +6,7 @@
 /*   By: baecoliv <baecoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 11:52:11 by baecoliv          #+#    #+#             */
-/*   Updated: 2025/07/18 11:46:32 by baecoliv         ###   ########.fr       */
+/*   Updated: 2025/07/18 16:15:32 by baecoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	parse_string_arg(char *arg, t_stack **head_a, int **tab_int)
 	char	**tableau;
 	int		count;
 	int		i;
-	t_stack	*temp;
 
 	i = 0;
 	count = 0;
@@ -33,10 +32,7 @@ int	parse_string_arg(char *arg, t_stack **head_a, int **tab_int)
 		return (free_tab(tableau), 0);
 	}
 	if (!allocate_and_convert(tableau, tab_int, count))
-	{
-		free_tab(tableau);
-		return (0);
-	}
+		return (free_tab(tableau), ft_printf("Error\n"), 1);
 	free_tab(tableau);
 	return (create_stack_from_array(*tab_int, count, head_a));
 }
